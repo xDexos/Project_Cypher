@@ -6,9 +6,9 @@ public class ProgramGlowny {
 
     public static void main(String[] args) {
 
-        //ścieżka testowa: C:/Projects/IntelliJProjects/Szyfrowanie_Plikow/TestPlikiDoSzyfrowania
+        //ścieżka testowa: C:/Projects/IntelliJProjects/Project_Cypher/TestPlikiDoSzyfrowania
 
-        PobieraniePlikow pobieraniePlikow = new PobieraniePlikow("C:/Projects/IntelliJProjects/Szyfrowanie_Plikow/TestPlikiDoSzyfrowania");
+        PobieraniePlikow pobieraniePlikow = new PobieraniePlikow("C:/Projects/IntelliJProjects/Project_Cypher/TestPlikiDoSzyfrowania");
         Thread watekPobieranie = new Thread(pobieraniePlikow);
 
         //startowanie wątku pobierającego ścieżki do plików
