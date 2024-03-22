@@ -35,12 +35,18 @@ public class ProgramGlowny {
             System.out.println(lista_kodowanych_plikow.get(i) + " ścieżka: " + lista_kodowanych_plikow.get(i).getPath());
         }
 
-        KodowaniePlikow kodowaniePlikow1 = new KodowaniePlikow(lista_kodowanych_plikow);
+        KolejkaObiektow kolejkaObiektow = new KolejkaObiektow(lista_kodowanych_plikow);
+        kolejkaObiektow.wypisz();
+
+        KodowaniePlikow kodowaniePlikow1 = new KodowaniePlikow(kolejkaObiektow);
         Thread watekKodowanie1 = new Thread(kodowaniePlikow1);
-        KodowaniePlikow kodowaniePlikow2 = new KodowaniePlikow(lista_kodowanych_plikow);
+        KodowaniePlikow kodowaniePlikow2 = new KodowaniePlikow(kolejkaObiektow);
         Thread watekKodowanie2 = new Thread(kodowaniePlikow2);
+        KodowaniePlikow kodowaniePlikow3 = new KodowaniePlikow(kolejkaObiektow);
+        Thread watekKodowanie3 = new Thread(kodowaniePlikow3);
         watekKodowanie1.start();
         watekKodowanie2.start();
+        watekKodowanie3.start();
 
     }
 
