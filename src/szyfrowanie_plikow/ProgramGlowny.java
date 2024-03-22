@@ -27,26 +27,29 @@ public class ProgramGlowny {
             System.out.println(paths.get(i));
         }
 
+        //offset dla szyfrowania Cezara
+        int offset = 1;
+
         //tworzenie listy obiektów plików
         System.out.println("===kolekcja obiektów plików=== / ILOŚĆ: " + paths.size());
         ArrayList<KodowanyPlik> lista_kodowanych_plikow = new ArrayList<>();
         for(int i = 0; i < paths.size(); i++){
-            lista_kodowanych_plikow.add(new KodowanyPlik(paths.get(i)));
+            lista_kodowanych_plikow.add(new KodowanyPlik(paths.get(i), offset));
             System.out.println(lista_kodowanych_plikow.get(i) + " ścieżka: " + lista_kodowanych_plikow.get(i).getPath());
         }
 
         KolejkaObiektow kolejkaObiektow = new KolejkaObiektow(lista_kodowanych_plikow);
         kolejkaObiektow.wypisz();
 
-        KodowaniePlikow kodowaniePlikow1 = new KodowaniePlikow(kolejkaObiektow);
+        KodowaniePlikow kodowaniePlikow1 = new KodowaniePlikow(kolejkaObiektow, true);
         Thread watekKodowanie1 = new Thread(kodowaniePlikow1);
-        KodowaniePlikow kodowaniePlikow2 = new KodowaniePlikow(kolejkaObiektow);
+        KodowaniePlikow kodowaniePlikow2 = new KodowaniePlikow(kolejkaObiektow,true);
         Thread watekKodowanie2 = new Thread(kodowaniePlikow2);
-        KodowaniePlikow kodowaniePlikow3 = new KodowaniePlikow(kolejkaObiektow);
-        Thread watekKodowanie3 = new Thread(kodowaniePlikow3);
+//        KodowaniePlikow kodowaniePlikow3 = new KodowaniePlikow(kolejkaObiektow);
+//        Thread watekKodowanie3 = new Thread(kodowaniePlikow3);
         watekKodowanie1.start();
         watekKodowanie2.start();
-        watekKodowanie3.start();
+        //watekKodowanie3.start();
 
     }
 

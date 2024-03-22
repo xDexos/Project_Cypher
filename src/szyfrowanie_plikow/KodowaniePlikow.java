@@ -4,8 +4,11 @@ public class KodowaniePlikow implements Runnable{
 
     private KolejkaObiektow kolejka;
 
-    KodowaniePlikow(KolejkaObiektow kolejka){
+    private boolean deszyfracja;
+
+    KodowaniePlikow(KolejkaObiektow kolejka, boolean deszyfracja){
         this.kolejka = kolejka;
+        this.deszyfracja = deszyfracja;
     }
 
     @Override
@@ -14,7 +17,14 @@ public class KodowaniePlikow implements Runnable{
         KodowanyPlik kodowanyPlik;
 
         while((kodowanyPlik = kolejka.getNextObject()) != null){
-            kodowanyPlik.szyfrowanie();
+
+            if (this.deszyfracja == false){
+                kodowanyPlik.szyfrowanie();
+            }else{
+                kodowanyPlik.deszyfrowanie();
+            }
+
+
         }
 
     }
