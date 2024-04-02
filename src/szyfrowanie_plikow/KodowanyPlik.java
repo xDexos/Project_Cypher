@@ -50,8 +50,6 @@ public class KodowanyPlik extends SzyfrCezara {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //System.out.println();
-        //System.out.println("Koniec czytania pliku");
 
     }
 
