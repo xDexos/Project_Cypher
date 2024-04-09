@@ -1,5 +1,6 @@
 package szyfrowanie_plikow;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -8,6 +9,9 @@ public class KodowanyPlik extends SzyfrCezara {
     private String path;
 
     private int offset;
+
+    private int progress;
+    private JProgressBar progressBar;
 
     public void szyfrowanie(){
 
@@ -28,24 +32,18 @@ public class KodowanyPlik extends SzyfrCezara {
             BufferedWriter bWriter = new BufferedWriter(new FileWriter(this.getPath()));
             for (int i = 0; i < zaszyfrowane_znaki.size(); i++){
                 bWriter.write(zaszyfrowane_znaki.get(i));
+
+                //aktualizowanie paskow
+                float preP = ((float)i+1 / (float)zaszyfrowane_znaki.size());
+                //System.out.println("SSS: " + zaszyfrowane_znaki.size());
+                //System.out.println("RRR: " + preP);
+                this.progress = (int)(preP * 100);
+                //System.out.println("PPP: " + progress);
+                //System.out.println(this.progress);
+
             }
+
             bWriter.close();
-
-            //testowe wypisaywanie pojedynczych znaków
-//            System.out.print("Znaki w pliku: ");
-//            for (int j = 0; j < lista_znakow.size(); j++){
-//                System.out.print(lista_znakow.get(j) + " ");
-//                try {
-//                    TimeUnit.MILLISECONDS.sleep(10);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-
-            //testowe dopisanie znaku
-//            BufferedWriter bWriter = new BufferedWriter(new FileWriter(this.getPath(), true));
-//            bWriter.write("#");
-//            bWriter.close();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -110,6 +108,18 @@ public class KodowanyPlik extends SzyfrCezara {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public void setProgressBar (JProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
+
+    public int getProgress () {
+        return this.progress;
+    }
+
+    public int getOffset () {
+        return this.offset;
     }
 
 }

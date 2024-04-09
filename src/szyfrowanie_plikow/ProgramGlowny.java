@@ -1,3 +1,4 @@
+/*
 package szyfrowanie_plikow;
 
 import javax.swing.*;
@@ -254,3 +255,4 @@ public class ProgramGlowny{
     }
 
 }
+*/

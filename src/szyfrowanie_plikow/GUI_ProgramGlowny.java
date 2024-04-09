@@ -1,6 +1,8 @@
 package szyfrowanie_plikow;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,9 +14,9 @@ public class GUI_ProgramGlowny{
 
     KolejkaObiektow kolejkaObiektow;
     private String[] path = new String[1];
-    private int liczbaPlikow;
     private boolean szyfrowanie;
     private int liczbaWatkow;
+    KodowaniePlikow[] kodowaniePlikow;
     private int offset;
     private boolean czyFolderWybrany;
 
@@ -28,11 +30,14 @@ public class GUI_ProgramGlowny{
 
     private JProgressBar[] progressBars;
 
+    private JSlider slider;
+
     public GUI_ProgramGlowny() {
         this.path[0] = "";
         this.liczbaWatkow = 3;
         this.offset = 1;
         this.czyFolderWybrany = false;
+        this.kodowaniePlikow = new KodowaniePlikow[liczbaWatkow];
 
         //=====GUI=================================================================================================
 
@@ -57,13 +62,13 @@ public class GUI_ProgramGlowny{
         radioButtonSzyfrowanie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                szyfrowanie = true;
+                szyfrowanie = false;
             }
         });
         radioButtonDeszyfrowanie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                szyfrowanie = false;
+                szyfrowanie = true;
             }
         });
 
@@ -79,21 +84,30 @@ public class GUI_ProgramGlowny{
 
         });
 
-//        JButton pobierzDaneButton = new JButton("Pobierz dane");
-//        pobierzDaneButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                kolejkaObiektow = pobierzDane();
-//            }
-//        });
-
         JButton startButton = new JButton("Start");
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ee) {
 
+//                radioButtonSzyfrowanie.setEnabled(false);
+//                radioButtonDeszyfrowanie.setEnabled(false);
+//                slider.setEnabled(false);
+//                startButton.setEnabled(false);
+//                radioButtonSzyfrowanie.setVisible(true);
+//                radioButtonDeszyfrowanie.setVisible(true);
+//                slider.setVisible(true);
+//                startButton.setVisible(true);
+
                 kolejkaObiektow = pobierzDane();
                 szyfrujDane(kolejkaObiektow);
+//                startButton.setEnabled(true);
+//                radioButtonSzyfrowanie.setEnabled(true);
+//                radioButtonDeszyfrowanie.setEnabled(true);
+//                slider.setEnabled(true);
+//                radioButtonSzyfrowanie.setVisible(true);
+//                radioButtonDeszyfrowanie.setVisible(true);
+//                slider.setVisible(true);
+//                startButton.setVisible(true);
 
             }
         });
@@ -116,6 +130,37 @@ public class GUI_ProgramGlowny{
         frame.setResizable(false);
         frame.setSize(800, 600);
 
+        //=====PROGRESS_BARS=====
+        panel4.setLayout(new GridLayout(liczbaWatkow, 1));
+        progressBars = new JProgressBar[liczbaWatkow];
+
+        for (int i = 0; i < liczbaWatkow; i++) {
+            progressBars[i] = new JProgressBar(0, 100);
+            progressBars[i].setValue(0);
+            progressBars[i].setStringPainted(true);
+            panel4.add(progressBars[i]);
+        }
+
+        frame.add(panel4, BorderLayout.CENTER);
+
+        frame.setVisible(true);
+
+        //=====SLIDERS=====
+        slider = new JSlider(0, 20, 1);
+        slider.setMinorTickSpacing(1);
+        slider.setMajorTickSpacing(5);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+
+                offset = slider.getValue();
+
+            }
+        });
+
         //=====ADDS=====
 
         frame.add(panel1, BorderLayout.NORTH);
@@ -127,9 +172,9 @@ public class GUI_ProgramGlowny{
 
         panel3.add(radioButtonSzyfrowanie);
         panel3.add(radioButtonDeszyfrowanie);
+        panel3.add(slider);
         panel3.add(dirButton);
         panel3.add(czyFolderWybranyLabel);
-        //panel3.add(pobierzDaneButton);
         panel3.add(startButton);
 
         group.add(radioButtonSzyfrowanie);
@@ -189,38 +234,10 @@ public class GUI_ProgramGlowny{
 
         ArrayList<String> paths = new ArrayList<>(pobieraniePlikow.getPaths());
 
-        //pobranie liczby plików do zmiennej
-        liczbaPlikow = paths.size();
-
-        //czyszczenie panel4
-        panel4.removeAll();
-        panel4.repaint();
-        panel4.revalidate();
-
-        //=====PROGRESS_BARS=====
-        panel4.setLayout(new GridLayout(liczbaPlikow, 1));
-        progressBars = new JProgressBar[liczbaPlikow];
-
-        for (int i = 0; i < liczbaPlikow; i++) {
-            progressBars[i] = new JProgressBar(0, 100);
-            progressBars[i].setValue(0);
-            progressBars[i].setStringPainted(true);
-            panel4.add(progressBars[i]);
-        }
-
-        frame.add(panel4, BorderLayout.CENTER);
-
-        frame.setVisible(true);
-        frame.repaint();
-        frame.revalidate();
-
         System.out.println("===kolekcja String ścieżek do plików===");
         for(int i = 0; i < paths.size(); i++){
             System.out.println(paths.get(i));
         }
-
-        //offset dla szyfrowania Cezara
-        //int offset = 1;
 
         //tworzenie listy obiektów plików
         System.out.println("===kolekcja obiektów plików=== / ILOŚĆ: " + paths.size());
@@ -232,18 +249,15 @@ public class GUI_ProgramGlowny{
 
         KolejkaObiektow kolejkaObiektow = new KolejkaObiektow(lista_kodowanych_plikow);
         kolejkaObiektow.wypisz();
+
         return kolejkaObiektow;
 
     }
     public void szyfrujDane(KolejkaObiektow kolejkaObiektow) {
 
-        //zmienne dla wątków
-//                int liczbaWatkow = 3;
-//                boolean szyfrowanie = false;
-
-        KodowaniePlikow[] kodowaniePlikow = new KodowaniePlikow[liczbaWatkow];
+//        KodowaniePlikow[] kodowaniePlikow = new KodowaniePlikow[liczbaWatkow];
         for(int i = 0; i < liczbaWatkow; i++){
-            kodowaniePlikow[i] = new KodowaniePlikow(kolejkaObiektow, szyfrowanie);
+            kodowaniePlikow[i] = new KodowaniePlikow(kolejkaObiektow, szyfrowanie,progressBars[i]);
             new Thread(kodowaniePlikow[i]).start();
         }
 
@@ -253,9 +267,9 @@ public class GUI_ProgramGlowny{
         return this.czyFolderWybrany;
     }
 
-    public int getLiczbaPlikow () {
-        return this.liczbaPlikow;
-    }
+//    public int getLiczbaPlikow () {
+//        return this.liczbaPlikow;
+//    }
 
     public void setFrame (JPanel panel) {
         this.frame.add(panel, BorderLayout.CENTER);
@@ -279,7 +293,12 @@ public class GUI_ProgramGlowny{
 
     public static void main(String[] args) {
 
-        GUI_ProgramGlowny program = new GUI_ProgramGlowny();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                GUI_ProgramGlowny program = new GUI_ProgramGlowny();
+                program.frame.setVisible(true);
+            }
+        });
 
     }
 
